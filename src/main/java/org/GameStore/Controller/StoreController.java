@@ -58,4 +58,17 @@ public class StoreController {
         return stores;
     }
 
+    public static Store loadStoreById(int id){
+      Transaction transaction = null;
+      Store store = null;
+      try(Session session = HibernateUtil.getSessionFactory().openSession()){
+        transaction = session.beginTransaction();
+        store = session.find(Store.class, id);
+        transaction.commit();
+      }catch(Exception e){
+        e.printStackTrace();
+      }
+      return store;
+    }
+
 }

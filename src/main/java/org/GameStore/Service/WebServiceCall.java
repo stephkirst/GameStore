@@ -26,6 +26,16 @@ public class WebServiceCall {
 
     }
 
+    public static boolean getDeals(String urlString){
+        boolean success = false;
+        try{
+            HttpURLConnection connection = createConnection(urlString);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return success;
+    }
+
     private static HttpURLConnection createConnection(String urlString){
         HttpURLConnection connection = null;
         try{
