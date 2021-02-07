@@ -4,6 +4,7 @@ import org.GameStore.Model.Store;
 import org.GameStore.Service.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,7 +47,10 @@ public class StoreController {
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
 
-            stores = session.createQuery("from Store", Store.class).list();
+            Query query = session.createQuery("from Store s where s.storeName = :store_name");
+            query.setParameter("store_name", storeName);
+            stores = query.list();
+
             transaction.commit();
         }catch(Exception e){
             e.printStackTrace();
