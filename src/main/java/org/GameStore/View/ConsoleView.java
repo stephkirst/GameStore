@@ -1,6 +1,8 @@
 package org.GameStore.View;
 
+import org.GameStore.Controller.GameController;
 import org.GameStore.Controller.StoreController;
+import org.GameStore.Model.Game;
 import org.GameStore.Model.Store;
 import org.GameStore.Service.WebServiceCall;
 
@@ -30,6 +32,9 @@ public class ConsoleView {
                             + "\n Store ID: " + store.getStoreId()
                             + "\n Is active: " + store.isActive());
                 }
+            } else if (input.contains("game")){
+                List<Game> games = WebServiceCall.getGameByName("https://www.cheapshark.com/api/1.0/games", input.replace("game ", ""));
+                System.out.println(GameController.prettyOutputGames(games));
             }
         }
     }

@@ -1,11 +1,14 @@
 package org.GameStore.Service;
 
+import org.GameStore.Controller.GameController;
 import org.GameStore.Controller.StoreController;
+import org.GameStore.Model.Game;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class WebServiceCall {
 
@@ -24,6 +27,20 @@ public class WebServiceCall {
         }
         return succses;
 
+    }
+
+    public static List<Game> getGameByName(String urlString, String gameName){
+        List<Game> gameList = null;
+        try{
+            HttpURLConnection connection = createConnection(urlString + "?title=" + gameName);
+            connection.setRequestMethod("GET");
+            String response = readResponse(connection);
+            gameList = GameController.readGamesFromJson(response);
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return gameList;
     }
 
     public static boolean getDeals(String urlString){
