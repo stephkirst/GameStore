@@ -15,9 +15,13 @@ public class GameController {
 
         for(int i = 0; games.length() > i; i++){
             JSONObject jsonGame = games.getJSONObject(i);
+            int steamAppId = 0;
+            if(!jsonGame.get("steamAppID").equals(null)){
+                steamAppId = jsonGame.getInt("steamAppID");
+            }
             Game game = new Game(jsonGame.getString("external"),
                     jsonGame.getInt("gameID"),
-                    jsonGame.getInt("steamAppID"));
+                    steamAppId);
             gameList.add(game);
         }
         return gameList;
@@ -26,7 +30,7 @@ public class GameController {
     public static String prettyOutputGames(List<Game> games){
         String output = "";
         for(Game game : games){
-            output = "\n" + gameObjString(game);
+            output = output + "\n\n" + gameObjString(game);
         }
         return output;
     }

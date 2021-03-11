@@ -16,13 +16,16 @@ public class ConsoleView {
         String input = null;
         boolean success = WebServiceCall.getStores("https://www.cheapshark.com/api/1.0/stores");
 
+        System.out.println("Hello friend! " +
+                "\n To get Information about a store enter \"store [Name]\" " +
+                "\n To get all current deals enter \"game [NameOfGame]\"");
+
+        if(!success){
+            System.out.println("Stores could not be loaded. Please run refresh");
+        }
+
         while(input != "Quit"){
-            System.out.println("Hello friend! " +
-                    "\n To get Information about a store enter \"store [Name]\" " +
-                    "\n To get all current deals enter \"games [NameOfStore]\"");
-            if(!success){
-                System.out.println("Stores could not be loaded. Please run refresh");
-            }
+            System.out.println("");
             input = scanner.nextLine();
 
             if(input.contains("store")){
