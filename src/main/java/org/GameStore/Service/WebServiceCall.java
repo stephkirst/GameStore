@@ -43,14 +43,27 @@ public class WebServiceCall {
         return gameList;
     }
 
-    public static boolean getDeals(String urlString){
-        boolean success = false;
+    public static String getDeals(String urlString){
+        String response = "";
         try{
             HttpURLConnection connection = createConnection(urlString);
         }catch(Exception e){
             e.printStackTrace();
         }
-        return success;
+        return response;
+    }
+
+    public static Game getGameById(String urlString, int id){
+        Game game = null;
+        try{
+            HttpURLConnection connection = createConnection(urlString + "?id=" + id);
+            connection.setRequestMethod("GET");
+            String response = readResponse(connection);
+            game = GameController.readGameFromJson(response, id);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return game;
     }
 
     private static HttpURLConnection createConnection(String urlString){

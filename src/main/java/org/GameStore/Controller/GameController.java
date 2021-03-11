@@ -27,6 +27,15 @@ public class GameController {
         return gameList;
     }
 
+    public static Game readGameFromJson(String jsonString, int id){
+        JSONObject jsonGame = new JSONObject(jsonString).getJSONObject("info");
+        int steamAppId = 0;
+        if(!jsonGame.get("steamAppID").equals(null)){
+            steamAppId = jsonGame.getInt("steamAppID");
+        }
+        return new Game(jsonGame.getString("title"), id, steamAppId);
+    }
+
     public static String prettyOutputGames(List<Game> games){
         String output = "";
         for(Game game : games){

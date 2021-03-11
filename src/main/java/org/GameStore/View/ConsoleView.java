@@ -18,7 +18,8 @@ public class ConsoleView {
 
         System.out.println("Hello friend! " +
                 "\n To get Information about a store enter \"store [Name]\" " +
-                "\n To get all current deals enter \"game [NameOfGame]\"");
+                "\n To get all current deals enter \"game [NameOfGame]\"" +
+                "\n To add a game to you watch list enter \" add [GameID\"");
 
         if(!success){
             System.out.println("Stores could not be loaded. Please run refresh");
@@ -28,16 +29,18 @@ public class ConsoleView {
             System.out.println("");
             input = scanner.nextLine();
 
-            if(input.contains("store")){
+            if(input.contains("store ")){
                 List<Store> stores = StoreController.loadStoreByName(input.replace("store ", ""));
                 for(Store store : stores){
                     System.out.println("Store name: " + store.getStoreName()
                             + "\n Store ID: " + store.getStoreId()
                             + "\n Is active: " + store.isActive());
                 }
-            } else if (input.contains("game")){
+            } else if (input.contains("game ")){
                 List<Game> games = WebServiceCall.getGameByName("https://www.cheapshark.com/api/1.0/games", input.replace("game ", ""));
                 System.out.println(GameController.prettyOutputGames(games));
+            } else if (input.contains("add ")){
+                
             }
         }
     }
