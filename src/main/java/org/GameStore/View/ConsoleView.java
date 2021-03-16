@@ -2,6 +2,7 @@ package org.GameStore.View;
 
 import org.GameStore.Controller.GameController;
 import org.GameStore.Controller.StoreController;
+import org.GameStore.Controller.WatchListGameController;
 import org.GameStore.Model.Game;
 import org.GameStore.Model.Store;
 import org.GameStore.Service.WebServiceCall;
@@ -40,7 +41,9 @@ public class ConsoleView {
                 List<Game> games = GameController.getGamesByName(input.replace("game ", ""));
                 System.out.println(prettyOutputGames(games));
             } else if (input.contains("add ")){
-                
+                String inputValue = input.replace("add ", "");
+                int id = Integer.parseInt(inputValue);
+                WatchListGameController.addGameToWatchList(id);
             }
         }
     }
