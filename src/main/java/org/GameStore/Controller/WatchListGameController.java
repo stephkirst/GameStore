@@ -7,7 +7,8 @@ public class WatchListGameController {
 
     public boolean addGameToWatchList(int id){
         boolean success = false;
-        Game game = WebServiceCall.getGameById("https://www.cheapshark.com/api/1.0/games" ,id);
+        Game game = GameController.getGameById(id);
+
         return success;
     }
 }

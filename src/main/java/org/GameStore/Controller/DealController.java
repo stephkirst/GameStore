@@ -17,7 +17,7 @@ public class DealController {
         } else {
             url = "https://www.cheapshark.com/api/1.0/deals?title=" + game.getTitle() + "exact=1";
         }
-        String response = WebServiceCall.getDeals(url);
+        String response = WebServiceCall.sendRequest(url);
 
     }
 

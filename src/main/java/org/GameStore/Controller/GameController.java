@@ -1,15 +1,18 @@
 package org.GameStore.Controller;
 
 import org.GameStore.Model.Game;
+import org.GameStore.Service.WebServiceCall;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class GameController {
 
-    public static List<Game> readGamesFromJson(String jsonString){
+    private static List<Game> readGamesFromJson(String jsonString){
         List<Game> gameList= new ArrayList<>();
         JSONArray games = new JSONArray(jsonString);
 
@@ -27,7 +30,7 @@ public class GameController {
         return gameList;
     }
 
-    public static Game readGameFromJson(String jsonString, int id){
+    private static Game readGameFromJson(String jsonString, int id){
         JSONObject jsonGame = new JSONObject(jsonString).getJSONObject("info");
         int steamAppId = 0;
         if(!jsonGame.get("steamAppID").equals(null)){
@@ -36,17 +39,22 @@ public class GameController {
         return new Game(jsonGame.getString("title"), id, steamAppId);
     }
 
-    public static String prettyOutputGames(List<Game> games){
-        String output = "";
-        for(Game game : games){
-            output = output + "\n\n" + gameObjString(game);
+    public static List<Game> getGamesByName(String title){
+        String response = WebServiceCall.sendRequest("https://www.cheapshark.com/api/1.0/games"
+                + "?title=" + title);
+        if(response != "Error"){
+            return readGamesFromJson(response);
         }
-        return output;
+        return Collections.emptyList();
     }
 
-    public static String gameObjString(Game game){
-        return "Title: " + game.getTitle()
-                + "\n Game ID: " + game.getGameId()
-                + "\n Steam App ID: " + game.getSteamAppId();
+    public static Game getGameById(int id){
+        String response = WebServiceCall.sendRequest("https://www.cheapshark.com/api/1.0/games"
+        + "?id=" + id);
+
+        if(response != "Error"){
+            return readGameFromJson(response, id);
+        }
+        return null;
     }
 }

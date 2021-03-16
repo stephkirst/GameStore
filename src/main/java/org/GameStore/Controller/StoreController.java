@@ -2,6 +2,7 @@ package org.GameStore.Controller;
 
 import org.GameStore.Model.Store;
 import org.GameStore.Service.HibernateUtil;
+import org.GameStore.Service.WebServiceCall;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class StoreController {
 
-    public static void readStoresFromJson(String jsonString){
+    private static void readStoresFromJson(String jsonString){
         JSONArray stores = new JSONArray(jsonString);
 
         for(int i = 0;  stores.length() > i; i++){
@@ -24,7 +25,6 @@ public class StoreController {
             saveStore(store);
 
         }
-
     }
 
     public static void saveStore(Store store){
@@ -69,6 +69,16 @@ public class StoreController {
         e.printStackTrace();
       }
       return store;
+    }
+
+    public static boolean requestStore(){
+        boolean success = false;
+        String response = WebServiceCall.sendRequest("https://www.cheapshark.com/api/1.0/stores");
+        if(response != "Error") {
+            readStoresFromJson(response);
+            success = true;
+        }
+        return success;
     }
 
 }

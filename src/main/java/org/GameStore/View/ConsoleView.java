@@ -14,7 +14,7 @@ public class ConsoleView {
     public static void run(){
         Scanner scanner = new Scanner(System.in);
         String input = null;
-        boolean success = WebServiceCall.getStores("https://www.cheapshark.com/api/1.0/stores");
+        boolean success = StoreController.requestStore();
 
         System.out.println("Hello friend! " +
                 "\n To get Information about a store enter \"store [Name]\" " +
@@ -37,11 +37,25 @@ public class ConsoleView {
                             + "\n Is active: " + store.isActive());
                 }
             } else if (input.contains("game ")){
-                List<Game> games = WebServiceCall.getGameByName("https://www.cheapshark.com/api/1.0/games", input.replace("game ", ""));
-                System.out.println(GameController.prettyOutputGames(games));
+                List<Game> games = GameController.getGamesByName(input.replace("game ", ""));
+                System.out.println(prettyOutputGames(games));
             } else if (input.contains("add ")){
                 
             }
         }
+    }
+
+    private static String prettyOutputGames(List<Game> games){
+        String output = "";
+        for(Game game : games){
+            output = output + "\n\n" + gameObjString(game);
+        }
+        return output;
+    }
+
+    private static String gameObjString(Game game){
+        return "Title: " + game.getTitle()
+                + "\n Game ID: " + game.getGameId()
+                + "\n Steam App ID: " + game.getSteamAppId();
     }
 }
