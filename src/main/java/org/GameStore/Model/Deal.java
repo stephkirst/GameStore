@@ -48,11 +48,11 @@ public class Deal {
         this.dealDateTo = dealDateTo;
     }
 
-    public WatchListGame getGame() {
+    public WatchListGame getWatchListGame() {
         return watchListGame;
     }
 
-    public void setGame(WatchListGame watchListGame) {
+    public void setWatchListGame(WatchListGame watchListGame) {
         this.watchListGame = watchListGame;
     }
 

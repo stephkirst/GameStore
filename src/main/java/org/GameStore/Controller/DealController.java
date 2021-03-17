@@ -4,7 +4,10 @@ import org.GameStore.Model.Deal;
 import org.GameStore.Model.Game;
 import org.GameStore.Model.Store;
 import org.GameStore.Model.WatchListGame;
+import org.GameStore.Service.HibernateUtil;
 import org.GameStore.Service.WebServiceCall;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -30,7 +33,7 @@ public class DealController {
         return deals;
     }
 
-    public static void searchDealsByGame(Game game){
+    public static List<Deal> searchDealsByGame(Game game){
         String url;
         if(game.getSteamAppId() != 0){
             url = "https://www.cheapshark.com/api/1.0/deals?steamAppID=" + game.getSteamAppId();
@@ -38,8 +41,35 @@ public class DealController {
             url = "https://www.cheapshark.com/api/1.0/deals?title=" + game.getTitle() + "exact=1";
         }
         String response = WebServiceCall.sendRequest(url);
-        readDealsFromJson(response);
+        List<Deal> deals = readDealsFromJson(response);
 
+        for(Deal deal : deals){
+            if(deal.getWatchListGame().getGameId() != game.getGameId()){
+                deals.remove(deal);
+            }
+        }
+        return deals;
     }
 
+    public static void saveSavingDeals(List<Deal> deals){
+        for(Deal deal : deals){
+            if(deal.getSavings() > 0){
+                saveDeal(deal);
+            }
+        }
+    }
+
+    public static void saveDeal(Deal deal){
+        Transaction transaction = null;
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            session.saveOrUpdate(deal);
+            transaction.commit();
+        }catch(Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
 }

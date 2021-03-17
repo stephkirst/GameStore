@@ -5,6 +5,7 @@ import org.GameStore.Controller.StoreController;
 import org.GameStore.Controller.WatchListGameController;
 import org.GameStore.Model.Game;
 import org.GameStore.Model.Store;
+import org.GameStore.Model.WatchListGame;
 import org.GameStore.Service.WebServiceCall;
 
 import java.util.List;
@@ -44,6 +45,8 @@ public class ConsoleView {
                 String inputValue = input.replace("add ", "");
                 int id = Integer.parseInt(inputValue);
                 WatchListGameController.addGameToWatchList(id);
+                WatchListGame game = WatchListGameController.loadGameById(id);
+                System.out.println(prettyOutWatchListGame(game));
             }
         }
     }
@@ -51,14 +54,25 @@ public class ConsoleView {
     private static String prettyOutputGames(List<Game> games){
         String output = "";
         for(Game game : games){
-            output = output + "\n\n" + gameObjString(game);
+            output = output + "\n\n" + prettyOutGame(game);
         }
         return output;
     }
 
-    private static String gameObjString(Game game){
+    private static String prettyOutGame(Game game){
         return "Title: " + game.getTitle()
                 + "\n Game ID: " + game.getGameId()
                 + "\n Steam App ID: " + game.getSteamAppId();
+    }
+
+    private static String prettyOutWatchListGame(WatchListGame game){
+        return "Title: " + game.getTitle()
+                + "\n Game ID: " + game.getGameId()
+                + "\n Steam App ID: " + game.getSteamAppId()
+                + "\n Internal Name: " + game.getInternalName()
+                + "\n Normal Price: " + game.getNormalPrice()
+                + "\n Metacritic Score: " + game.getMetacriticScore()
+                + "\n Steam Rating: " + game.getSteamRatingText() + " " + game.getSteamRatingPercent() + "%"
+                + "\n Release Date: " + game.getReleaseDate().toString();
     }
 }
